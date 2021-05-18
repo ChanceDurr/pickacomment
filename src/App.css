@@ -2,37 +2,77 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.row {
+  padding: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.col {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.navbar-brand {
+  padding: 20px;
+}
+
+.socialMediaButton {
+  max-width: 75px;
+  max-height: 75px;
+}
+
+.logoButton {
+  width: 150px;
+  height: 125px;
+}
+
+#sliderGroup {
+  display: flex;
+  align-items: left;
+  justify-content: left;
+}
+
+#numberSlider {
+  min-width: 400px;
+  max-width: 450px
+}
+
+#numberSelected {
+  max-width: 75px;
+}
+
+#twitterSubmit {
+  margin-top: 40px;
+}
+
+#numberOf {
+  margin-top: 20px;
+}
+
+#checks {
+  margin-top: 20px;
+}
+
+.title {
+  color: aliceblue;
+  margin-top: 40px;
+}
+
+.urlInput {
+  max-width: 500px;
+}
+
+.main-text {
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.center {
+  display: grid;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.main-form {
+  margin-top: 40px;
 }
