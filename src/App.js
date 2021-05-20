@@ -5,6 +5,8 @@ import { Button, Image, ButtonGroup, Container, Form } from "react-bootstrap"
 import "bootstrap/dist/css/bootstrap.min.css"
 import React from 'react';
 
+require("dotenv").config()
+
 
 class App extends React.Component {
 
@@ -14,6 +16,7 @@ class App extends React.Component {
 		showForm			: false,
 		urlLabel			: "Twitter URL",
 		urlPlaceholder		: "https://twitter.com/Twitter/status/1390725076996268038",
+		url 				: "",
 		commentType			: "tweets",
 		checkboxes			: ["Following", "Liked", "Retweeted", "Tagged?"],
 		following			: false,
@@ -22,7 +25,8 @@ class App extends React.Component {
 		subscribed			: false,
 		tagged				: false,
 		notifications		: false,
-		results				: ["test"]
+		results				: ["test"],
+		winners				: []
 	};
 
 	handleCommentChange = event => {
@@ -81,34 +85,32 @@ class App extends React.Component {
 		}
 	}
 
-	handleSubmit = event => {
-		fetch("http://localhost:5000/get_comments", {
-			method: "GET",
-			mode: "no-cors", 
-			headers: {
-				"Content-Type": "application/json"
-			},
-			data: this.state
+	handleUrlChange = event => {
+		this.setState({
+			url: event.target.value
 		})
-		.then(response => {
-			if (response.ok) {
-				return response.json()
-			}
-			throw response;
-		})
-		.then(data => {
-			this.setState({
-				results: data
-			});
-		})
-		.catch(error => {
-			console.error("Error fetching data: ", error)
-		})
-
-		console.log(this.state)
-		return false
 	}
 
+	handleSubmit = event => {
+		fetch("/comments", {
+			method: "POST",
+			body: JSON.stringify(this.state),
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+		.then(function (response) {
+			if (response.status === 200) {
+				return response.json()
+			}
+
+			alert("Not enough comments for number chosen")
+			throw new Error("ahhh")
+		})
+		.then(data => this.setState({winners: data}))
+		.catch(error => console.log(error))
+
+	}
 
 	render() {
 		return (
@@ -145,6 +147,7 @@ class App extends React.Component {
 						name="instagram"
 						onClick={this.handlePlatformChange}
 						variant="secondary"
+						disabled
 					>
 						<Image
 							className="socialMediaButton"
@@ -159,7 +162,9 @@ class App extends React.Component {
 						className="logoButton"
 						name="youtube"
 						onClick={this.handlePlatformChange}
-						variant="secondary">
+						variant="secondary"
+						disabled
+					>
 							<Image
 								className="socialMediaButton"
 								name="youtube"
@@ -173,7 +178,7 @@ class App extends React.Component {
 				<Form className="main-form">
 					<Form.Group>
 						<Form.Label className="main-text">{this.state.urlLabel}</Form.Label>
-						<Form.Control className="urlInput" type="text" placeholder={this.state.urlPlaceholder}></Form.Control>
+						<Form.Control className="urlInput" type="text" onChange={this.handleUrlChange} placeholder={this.state.urlPlaceholder}></Form.Control>
 					</Form.Group>
 
 					<Form.Label id="numberOf" className="main-text">Number of {this.state.commentType}</Form.Label>
@@ -222,7 +227,16 @@ class App extends React.Component {
 					>Pick {this.state.numberOfComments} {this.state.commentType}
 					</Button>
 				</Form>
+				<div>
+					<ul>
+						{console.log(this.state.winners)}
+						{this.state.winners.map((winner) => (
+							<li key={`${winner}`} className='main-text'>{winner}</li>
+						))}
+					</ul>
+				</div>
 			</Container>
+			
 
 		)
 	}
